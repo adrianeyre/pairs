@@ -9,9 +9,12 @@ import IDeck from './interfaces/deck';
 import ICard from './interfaces/card'
 
 export default class Game implements IGame {
+  private readonly DEFAULT_TIMER_INTERVAL: number = 3000;
+
   private canvas: ICanvas;
   private deck: IDeck;
   private selected: ICard[] = [];
+  private timer: any;
 
   constructor() {
     this.canvas = new Canvas({ height: 700, width: 850 });
@@ -45,18 +48,18 @@ export default class Game implements IGame {
 
   private onMouseDown = (event: MouseEvent): void => {
     const card = this.deck.findCardByCoords(event.x, event.y)
+    if (this.selected.length > 1) return this.resetSelected();
     if (!card || this.selected.indexOf(card) > -1 || this.selected.length > 1) return;
-
-    console.log(`card = ${card.suite}${card.value}`)
-
-    
+ 
     this.selected.push(card);
-
-    console.log('selected = ', this.selected)
+    this.startTimer();
     this.checkHasWon();
     this.drawCards();
+  }
 
-    if (this.selected.length > 1) this.selected = []; /// TEMP!!!
+  private resetSelected = (): void => {
+    this.selected = [];
+    this.drawCards();
   }
 
   private checkHasWon = (): boolean => {
@@ -71,4 +74,14 @@ export default class Game implements IGame {
 
     return hasWon;
   }
+
+  private timerDone = (): void => {
+    if (this.selected.length < 2) return;
+
+    this.resetSelected();
+  }
+
+  private startTimer = (): void => {
+    setTimeout(() => this.timerDone(), this.DEFAULT_TIMER_INTERVAL)
+	}
 }

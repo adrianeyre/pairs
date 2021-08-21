@@ -7,6 +7,7 @@ export default class Card implements ICard {
 	public cost: number;
 	public colour: string;
 	public isBlack: boolean;
+	public found: boolean = false;
 	public x: number;
 	public y: number;
 

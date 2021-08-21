@@ -21,7 +21,17 @@ export default class Canvas implements ICanvas {
 		this.ctx = this.canvas.getContext('2d');
 	}
 
-	public drawCard = (card: ICard, x: number, y: number): void => {
+	public drawCard = (card: ICard, x: number, y: number, show: boolean): void => {
+		if (show) return this.drawFront(card, x, y);
+
+		return this.drawBack(x, y);
+	}
+
+	public publish = (): HTMLCanvasElement => document.body.appendChild(this.canvas);
+
+	public clear = (): void | null => this.ctx ? this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) : null;
+
+	private drawFront = (card: ICard, x: number, y: number): void => {
 		if (!this.ctx) return;
 
 		this.drawText(x, y , 59, this.DEFAULT_CARD_BACKGROUND_COLOUR, this.DEFAULT_CARD_BACKGROUND);
@@ -31,9 +41,10 @@ export default class Canvas implements ICanvas {
 		this.drawText(x, y - 2, 40, card.colour, card.suite);
 	}
 
-	public publish = (): HTMLCanvasElement => document.body.appendChild(this.canvas);
-
-	public clear = (): void | null => this.ctx ? this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) : null;
+	private drawBack = (x: number, y: number): void => {
+		this.drawText(x, y , 59, this.DEFAULT_CARD_BACKGROUND_COLOUR, this.DEFAULT_CARD_BACKGROUND);
+		this.drawText(x , y, 55, this.DEFAULT_CARD_OUTLINE_COLOUR, this.DEFAULT_CARD_BACKGROUND);
+	}
 
 	private drawText = (x: number, y: number, size: number, colour: string, text: string, textAlign: CanvasTextAlign = 'center'): void => {
 		if (!this.ctx) return;

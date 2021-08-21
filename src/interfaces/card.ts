@@ -4,6 +4,7 @@ export default interface ICard {
 	cost: number;
 	colour: string;
 	isBlack: boolean;
+	found: boolean;
 	x: number;
 	y: number;
 	setX(x: number): number;

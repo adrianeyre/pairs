@@ -8,16 +8,16 @@ import ICanvas from './interfaces/canvas';
 import IDeck from './interfaces/deck';
 import ICard from './interfaces/card'
 
-export default class Game implements IGame {
-  private readonly DEFAULT_TIMER_INTERVAL: number = 3000;
+import config from './config/config';
 
+export default class Game implements IGame {
   private canvas: ICanvas;
   private deck: IDeck;
   private selected: ICard[] = [];
   private timer: any;
 
   constructor() {
-    this.canvas = new Canvas({ height: 700, width: 850 });
+    this.canvas = new Canvas({});
     this.deck = new Deck();
   }
 
@@ -43,6 +43,7 @@ export default class Game implements IGame {
 		if (!canvas) throw Error('canvas not found!');
 		canvas.addEventListener('mousedown', this.onMouseDown);
 
+    this.displayRemainingPairs();
 		this.canvas.publish();
 	}
 
@@ -55,11 +56,13 @@ export default class Game implements IGame {
     this.startTimer();
     this.checkHasWon();
     this.drawCards();
+    this.displayRemainingPairs();
   }
 
   private resetSelected = (): void => {
     this.selected = [];
     this.drawCards();
+    this.displayRemainingPairs();
   }
 
   private checkHasWon = (): boolean => {
@@ -72,6 +75,7 @@ export default class Game implements IGame {
     this.selected.forEach(card => card.found = true);
     this.selected = [];
 
+    this.displayRemainingPairs();
     return hasWon;
   }
 
@@ -82,6 +86,14 @@ export default class Game implements IGame {
   }
 
   private startTimer = (): void => {
-    setTimeout(() => this.timerDone(), this.DEFAULT_TIMER_INTERVAL)
+    clearInterval(this.timer)
+
+    this.timer = setTimeout(() => this.timerDone(), config.timerInterval)
 	}
+
+  private displayRemainingPairs = (): void => {
+    const remaining = this.deck.cards.filter(card => !card.found).length / 2;
+
+    this.canvas.displayProgress(remaining);
+  }
 }

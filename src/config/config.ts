@@ -1,4 +1,4 @@
-import IConfig from '../interfaces/config';
+import type IConfig from '../interfaces/config';
 
 const config: IConfig = {
   suites: 4,
@@ -10,6 +10,6 @@ const config: IConfig = {
   defaultCardBackgroundColour: '#000',
   defaultCardOutlineColour: '#FFF',
   defaultCardBackground: String.fromCharCode(9608),
-}
+};
 
 export default config;

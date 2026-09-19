@@ -1,10 +1,12 @@
 import { defineConfig } from 'vite';
 
-// The site is published to https://adrianeyre.github.io/pairs/, so every asset
-// URL has to carry the repository name. Without this the built bundle is
-// requested from the domain root and GitHub Pages serves a blank page.
+// The site is published to https://pairs.adrianeyre.co.uk, a custom domain
+// served from the root, so asset URLs must be root-relative. Setting a base of
+// '/pairs/' here (as was needed for the old adrianeyre.github.io/pairs/ URL)
+// makes the browser request /pairs/assets/*.js and /pairs/assets/*.css, which
+// do not exist on the custom domain and 404.
 export default defineConfig({
-  base: '/pairs/',
+  base: '/',
   build: {
     outDir: 'dist',
     emptyOutDir: true,

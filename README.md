@@ -59,4 +59,4 @@ rather than the commit that triggered the run.
 
 ## <a name="Play">Play Pairs</a>
 
-- [Play Pairs](https://adrianeyre.github.io/pairs/)
+- [Play Pairs](https://pairs.adrianeyre.co.uk/)
